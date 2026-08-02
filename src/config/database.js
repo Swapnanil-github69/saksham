@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const connectDB = async () => {
   const uri = process.env.MONGODB_URI;
   if (!uri) {
-    console.error('Error: MONGODB_URI is not defined in environment variables.');
+    console.error('MongoDB connection failed: MONGODB_URI environment variable is missing.');
     process.exit(1);
   }
 
   // Parse connection URI to hide password in logs if present
-  let safeUri = uri;
+  let safeUri = 'MongoDB Atlas';
   try {
     const parsed = new URL(uri);
     if (parsed.password) {
@@ -16,28 +16,54 @@ const connectDB = async () => {
     }
     safeUri = parsed.toString();
   } catch (e) {
-    // If it's not a standard URL (e.g., standard replica set strings without protocol parsable by URL constructor),
-    // we can attempt a basic regex replace or just state that we are connecting.
     safeUri = uri.replace(/:([^:@]+)@/, ':****@');
   }
 
+  // Hook connection event handlers
+  mongoose.connection.on('connected', () => {
+    console.log('MongoDB connection established successfully');
+  });
+
+  mongoose.connection.on('error', (err) => {
+    let friendlyError = err.message;
+    if (friendlyError.includes('Authentication failed') || friendlyError.includes('bad auth')) {
+      friendlyError = 'Authentication failed (invalid credentials)';
+    } else if (friendlyError.includes('ENOTFOUND') || friendlyError.includes('Server selection timed out') || friendlyError.includes('MongooseServerSelectionError')) {
+      friendlyError = 'Network failure (cannot reach MongoDB Atlas cluster)';
+    }
+    
+    // Sanitize any potential leaked connection string from error
+    friendlyError = friendlyError.replace(uri, safeUri);
+    friendlyError = friendlyError.replace(/:([^:@]+)@/, ':****@');
+
+    console.error('MongoDB connection error:', friendlyError);
+  });
+
+  mongoose.connection.on('disconnected', () => {
+    console.log('MongoDB connection disconnected');
+  });
+
   try {
-    mongoose.connection.on('connected', () => {
-      console.log('MongoDB connection established successfully.');
-    });
-
-    mongoose.connection.on('error', (err) => {
-      console.error('MongoDB connection error:', err.message);
-    });
-
-    mongoose.connection.on('disconnected', () => {
-      console.log('MongoDB connection disconnected.');
-    });
-
-    console.log(`Connecting to MongoDB at: ${safeUri}`);
+    console.log('Connecting to MongoDB Atlas...');
     await mongoose.connect(uri);
+    console.log('MongoDB Atlas connected successfully');
   } catch (error) {
-    console.error('Failed to connect to MongoDB:', error.message);
+    let friendlyError = error.message;
+    
+    // Categorize error messages
+    if (friendlyError.includes('Authentication failed') || friendlyError.includes('bad auth')) {
+      friendlyError = 'Authentication failed (invalid credentials)';
+    } else if (friendlyError.includes('ENOTFOUND') || friendlyError.includes('Server selection timed out') || friendlyError.includes('MongooseServerSelectionError')) {
+      friendlyError = 'Network failure (cannot reach MongoDB Atlas cluster)';
+    } else if (friendlyError.includes('Invalid scheme') || friendlyError.includes('must begin with')) {
+      friendlyError = 'Invalid connection string format';
+    }
+    
+    // Sanitize any potential leaked connection string from error
+    friendlyError = friendlyError.replace(uri, safeUri);
+    friendlyError = friendlyError.replace(/:([^:@]+)@/, ':****@');
+
+    console.error('MongoDB connection failed:', friendlyError);
     process.exit(1);
   }
 };
@@ -64,3 +90,4 @@ process.on('SIGTERM', async () => {
 });
 
 module.exports = { connectDB, closeDB };
+

@@ -27,7 +27,7 @@ const runTests = async () => {
     const healthData = await healthRes.json();
     assert(healthRes.status === 200, 'Health check returns 200 status');
     assert(healthData.success === true, 'Health check returns success=true');
-    assert(healthData.database === 'Connected', 'Database connection status is Connected');
+    assert(healthData.database === 'connected', 'Database connection status is connected');
 
     // Make sure we have unique email suffixes for each test run to avoid pre-existing seed conflicts
     const suffix = Date.now();
