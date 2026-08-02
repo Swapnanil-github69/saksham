@@ -57,12 +57,21 @@ app.use('/api/saved-jobs', savedJobRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 
+// Root welcome route
+app.get('/', (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: 'Welcome to the Saksham API. Access the endpoints under /api/...',
+    healthCheck: '/api/health'
+  });
+});
+
 // Health Check (Step 25)
 app.get('/api/health', (req, res) => {
   const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
   return res.status(200).json({
     success: true,
-    message: 'KarmSetu API is running',
+    message: 'Saksham API is running',
     database: dbStatus,
   });
 });
