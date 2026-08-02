@@ -59,10 +59,10 @@ app.use('/api/admin', adminRoutes);
 
 // Health Check (Step 25)
 app.get('/api/health', (req, res) => {
-  const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
+  const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
   return res.status(200).json({
     success: true,
-    message: 'Job Portal API is running',
+    message: 'KarmSetu API is running',
     database: dbStatus,
   });
 });
