@@ -20,6 +20,8 @@ const startServer = async () => {
   
   const server = app.listen(PORT, () => {
     console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+    console.log(`Localhost Link: http://localhost:${PORT}`);
+    console.log(`API Health Check: http://localhost:${PORT}/api/health`);
   });
 
   // Handle unhandled promise rejections

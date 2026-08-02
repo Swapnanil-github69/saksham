@@ -11,7 +11,31 @@ const register = catchAsync(async (req, res) => {
 const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const data = await authService.loginUser({ email, password });
-  return sendSuccess(res, 'Login successful', data, 200);
+  
+  const responseUser = {
+    id: data.user._id,
+    _id: data.user._id,
+    name: data.user.name,
+    email: data.user.email,
+    role: data.user.role,
+    isActive: data.user.isActive,
+    createdAt: data.user.createdAt,
+    updatedAt: data.user.updatedAt
+  };
+
+  return res.status(200).json({
+    success: true,
+    message: 'Login successful',
+    token: data.token,
+    user: {
+      id: data.user._id,
+      role: data.user.role
+    },
+    data: {
+      token: data.token,
+      user: responseUser
+    }
+  });
 });
 
 const getMe = catchAsync(async (req, res) => {
