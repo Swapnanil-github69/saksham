@@ -5,16 +5,15 @@ const mongoSanitize = require('express-mongo-sanitize');
 const path = require('path');
 const mongoose = require('mongoose');
 
-// Import routes
-const authRoutes = require('./routes/auth.routes');
-const userRoutes = require('./routes/user.routes');
-const profileRoutes = require('./routes/profile.routes');
-const companyRoutes = require('./routes/company.routes');
-const jobRoutes = require('./routes/job.routes');
-const applicationRoutes = require('./routes/application.routes');
-const savedJobRoutes = require('./routes/savedJob.routes');
-const notificationRoutes = require('./routes/notification.routes');
-const adminRoutes = require('./routes/admin.routes');
+const authRoutes = require('./routes/auth/auth.routes');
+const userRoutes = require('./routes/user/user.routes');
+const profileRoutes = require('./routes/profile/profile.routes');
+const companyRoutes = require('./routes/company/company.routes');
+const jobRoutes = require('./routes/job/job.routes');
+const applicationRoutes = require('./routes/application/application.routes');
+const savedJobRoutes = require('./routes/savedJob/savedJob.routes');
+const notificationRoutes = require('./routes/notification/notification.routes');
+const adminRoutes = require('./routes/admin/admin.routes');
 
 // Import middlewares
 const errorHandler = require('./middleware/error.middleware');
