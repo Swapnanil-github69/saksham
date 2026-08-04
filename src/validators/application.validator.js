@@ -22,7 +22,7 @@ const validateApplicationStatus = (req, res, next) => {
 const validateObjectId = (paramName = 'id') => {
   return (req, res, next) => {
     const id = req.params[paramName];
-    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+    if (!id || !/^[A-Z0-9]{12}$/.test(id)) {
       return next(new AppError(`Invalid ${paramName} format`, 'VALIDATION_ERROR', 400));
     }
     next();

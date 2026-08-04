@@ -1,9 +1,14 @@
 const mongoose = require('mongoose');
+const generateAlphanumericId = require('../utils/idGenerator');
 
 const CompanySchema = new mongoose.Schema(
   {
+    _id: {
+      type: String,
+      default: () => generateAlphanumericId(),
+    },
     employerId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: 'User',
       required: true,
     },
