@@ -1,9 +1,14 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const ROLES = require('../constants/roles');
+const generateAlphanumericId = require('../utils/idGenerator');
 
 const UserSchema = new mongoose.Schema(
   {
+    _id: {
+      type: String,
+      default: () => generateAlphanumericId(),
+    },
     name: {
       type: String,
       required: [true, 'Please provide a name'],

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const generateAlphanumericId = require('../utils/idGenerator');
 
 const EducationSchema = new mongoose.Schema({
   school: { type: String, required: true },
@@ -22,8 +23,12 @@ const ExperienceSchema = new mongoose.Schema({
 
 const ProfileSchema = new mongoose.Schema(
   {
+    _id: {
+      type: String,
+      default: () => generateAlphanumericId(),
+    },
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: 'User',
       required: true,
       unique: true,

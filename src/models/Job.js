@@ -1,15 +1,20 @@
 const mongoose = require('mongoose');
 const { EMPLOYMENT_TYPES, EXPERIENCE_LEVELS, JOB_STATUS } = require('../constants/job.constants');
+const generateAlphanumericId = require('../utils/idGenerator');
 
 const JobSchema = new mongoose.Schema(
   {
+    _id: {
+      type: String,
+      default: () => generateAlphanumericId(),
+    },
     employerId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: 'User',
       required: true,
     },
     companyId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: 'Company',
       required: true,
     },

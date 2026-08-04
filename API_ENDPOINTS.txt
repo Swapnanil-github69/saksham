@@ -1,0 +1,643 @@
+================================================================================
+SAKSHAM JOB PORTAL — API ENDPOINTS & PAYLOAD REFERENCE
+================================================================================
+
+This document lists all active HTTP API endpoints, authorization rules, request
+payloads, and descriptions.
+
+Base URL: http://localhost:8000/api
+
+--------------------------------------------------------------------------------
+1. AUTHENTICATION & SESSION MANAGEMENT
+--------------------------------------------------------------------------------
+
+1.1 REGISTER USER
+    * Method: POST
+    * Route: /api/auth/register
+    * Auth Required: No (Public)
+    * Request Headers:
+      Content-Type: application/json
+    * Request Body Payload:
+      {
+        "name": "John Doe",
+        "email": "john.doe@example.com",
+        "password": "password123",
+        "role": "JOB_SEEKER" 
+      }
+      Note: Allowed roles are "JOB_SEEKER" and "EMPLOYER" (default: "JOB_SEEKER").
+    * Function: Registers a new user account, hashes the password, and returns
+      the sanitized user object.
+
+1.2 LOGIN
+    * Method: POST
+    * Route: /api/auth/login
+    * Auth Required: No (Public)
+    * Request Headers:
+      Content-Type: application/json
+    * Request Body Payload:
+      {
+        "email": "john.doe@example.com",
+        "password": "password123"
+      }
+    * Function: Authenticates credentials and returns a secure JWT and user info.
+
+1.3 GET CURRENT USER
+    * Method: GET
+    * Route: /api/auth/me
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Request Body Payload: None
+    * Function: Retrieves current user profile details from the session.
+
+1.4 LOGOUT
+    * Method: POST
+    * Route: /api/auth/logout
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Request Body Payload: None
+    * Function: Confirms logout session client-side.
+
+--------------------------------------------------------------------------------
+2. USER METADATA
+--------------------------------------------------------------------------------
+
+2.1 GET SANITIZED USER DETAILS
+    * Method: GET
+    * Route: /api/users/:id
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Request Body Payload: None
+    * Function: Fetches sanitized database metadata of the specified user.
+
+--------------------------------------------------------------------------------
+3. JOB SEEKER PROFILES
+--------------------------------------------------------------------------------
+
+3.1 GET PROFILE
+    * Method: GET
+    * Route: /api/profile
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: JOB_SEEKER
+    * Request Body Payload: None
+    * Function: Fetches the candidate profile of the logged-in job seeker.
+
+3.2 CREATE PROFILE
+    * Method: POST
+    * Route: /api/profile
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: JOB_SEEKER
+    * Request Headers:
+      Content-Type: multipart/form-data
+    * Request Body Payload / Multipart Fields:
+      {
+        "phone": "9876543210",
+        "location": "New Delhi, India",
+        "bio": "Full Stack Developer",
+        "skills": ["JavaScript", "Node.js", "Express"],
+        "education": [
+          {
+            "school": "University of Delhi",
+            "degree": "Bachelor of Technology",
+            "fieldOfStudy": "Computer Science",
+            "from": "2020-08-01",
+            "to": "2024-05-31",
+            "description": "Graduated First Class."
+          }
+        ],
+        "experience": [
+          {
+            "title": "Software Developer Intern",
+            "company": "Tech Solutions",
+            "location": "Noida, India",
+            "from": "2023-06-01",
+            "current": true,
+            "description": "Building Express REST services."
+          }
+        ],
+        "profileImage": [File Upload (JPG/PNG/WEBP)],
+        "resume": [File Upload (PDF/DOC/DOCX)]
+      }
+    * Function: Creates a new candidate profile and uploads files.
+
+3.3 UPDATE PROFILE
+    * Method: PUT
+    * Route: /api/profile
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: JOB_SEEKER
+    * Request Headers:
+      Content-Type: multipart/form-data
+    * Request Body Payload / Multipart Fields:
+      Same structure as CREATE PROFILE (partial or full updates allowed).
+    * Function: Updates existing profile fields and replaces attachments.
+
+3.4 DELETE PROFILE
+    * Method: DELETE
+    * Route: /api/profile
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: JOB_SEEKER
+    * Request Body Payload: None
+    * Function: Permanently deletes the logged-in candidate's profile.
+
+--------------------------------------------------------------------------------
+4. COMPANY PROFILES
+--------------------------------------------------------------------------------
+
+4.1 LIST ALL COMPANIES
+    * Method: GET
+    * Route: /api/companies
+    * Auth Required: No (Public)
+    * Request Body Payload: None
+    * Function: Returns a list of all registered companies.
+
+4.2 GET COMPANY BY ID
+    * Method: GET
+    * Route: /api/companies/:id
+    * Auth Required: No (Public)
+    * Request Body Payload: None
+    * Function: Returns details of a specific company.
+
+4.3 CREATE COMPANY PROFILE
+    * Method: POST
+    * Route: /api/companies
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: EMPLOYER
+    * Request Headers:
+      Content-Type: multipart/form-data
+    * Request Body Payload / Multipart Fields:
+      {
+        "companyName": "Tech Giants Corp",
+        "description": "Leading developer services provider.",
+        "website": "https://techgiants.example.com",
+        "location": "Bengaluru, India",
+        "industry": "Software Engineering",
+        "logo": [File Upload (JPG/PNG/WEBP)]
+      }
+    * Function: Creates a company profile.
+
+4.4 UPDATE COMPANY PROFILE
+    * Method: PUT
+    * Route: /api/companies/:id
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: Employer Owner or ADMIN
+    * Request Headers:
+      Content-Type: multipart/form-data
+    * Request Body Payload / Multipart Fields:
+      Same structure as CREATE COMPANY (partial or full updates allowed).
+    * Function: Modifies company fields or logo.
+
+4.5 DELETE COMPANY
+    * Method: DELETE
+    * Route: /api/companies/:id
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: Employer Owner or ADMIN
+    * Request Body Payload: None
+    * Function: Removes a company profile.
+
+--------------------------------------------------------------------------------
+5. JOB LISTINGS
+--------------------------------------------------------------------------------
+
+5.1 SEARCH & FILTER JOBS
+    * Method: GET
+    * Route: /api/jobs
+    * Auth Required: No (Public)
+    * Request Body Payload: None (uses URL Query parameters)
+    * Query Parameters:
+      - keyword (string)
+      - location (string)
+      - category (string)
+      - employmentType (FULL_TIME, PART_TIME, CONTRACT, INTERNSHIP, REMOTE, HYBRID)
+      - experienceLevel (ENTRY, MID, SENIOR, LEAD)
+      - skills (comma-separated, e.g. "Node.js,React")
+      - salaryMin (number)
+      - salaryMax (number)
+      - page (number, default: 1)
+      - limit (number, default: 10)
+    * Function: Queries, filters, and paginates open jobs.
+
+5.2 GET JOB BY ID
+    * Method: GET
+    * Route: /api/jobs/:id
+    * Auth Required: No (Public)
+    * Request Body Payload: None
+    * Function: Returns full description and company details of a single job.
+
+5.3 POST A JOB
+    * Method: POST
+    * Route: /api/jobs
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: EMPLOYER
+    * Request Headers:
+      Content-Type: application/json
+    * Request Body Payload:
+      {
+        "companyId": "60d0fe4f5311236168a109cc",
+        "title": "Backend Node.js Developer",
+        "description": "Looking for a backend dev...",
+        "location": "Remote",
+        "employmentType": "FULL_TIME",
+        "experienceLevel": "MID",
+        "salaryMin": 60000,
+        "salaryMax": 90000,
+        "skills": ["Node.js", "Express", "MongoDB"],
+        "category": "Software Engineering",
+        "deadline": "2026-12-31"
+      }
+    * Function: Creates a job posting.
+
+5.4 UPDATE JOB
+    * Method: PUT
+    * Route: /api/jobs/:id
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: Employer Owner or ADMIN
+    * Request Headers:
+      Content-Type: application/json
+    * Request Body Payload:
+      Same structure as POST A JOB (fields are optional for partial updates).
+    * Function: Updates job posting fields.
+
+5.5 DELETE JOB
+    * Method: DELETE
+    * Route: /api/jobs/:id
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: Employer Owner or ADMIN
+    * Request Body Payload: None
+    * Function: Deletes a job listing.
+
+--------------------------------------------------------------------------------
+6. BOOKMARKS (SAVED JOBS)
+--------------------------------------------------------------------------------
+
+6.1 SAVE JOB
+    * Method: POST
+    * Route: /api/jobs/:jobId/save
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: JOB_SEEKER
+    * Request Body Payload: None
+    * Function: Bookmarks a job posting.
+
+6.2 REMOVE SAVED JOB
+    * Method: DELETE
+    * Route: /api/jobs/:jobId/save
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: JOB_SEEKER
+    * Request Body Payload: None
+    * Function: Un-bookmarks a job posting.
+
+6.3 LIST SAVED JOBS
+    * Method: GET
+    * Route: /api/saved-jobs
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: JOB_SEEKER
+    * Request Body Payload: None
+    * Function: Retrieves all jobs bookmarked by the candidate.
+
+--------------------------------------------------------------------------------
+7. JOB APPLICATIONS
+--------------------------------------------------------------------------------
+
+7.1 SUBMIT APPLICATION (APPLY FOR JOB)
+    * Method: POST
+    * Route: /api/jobs/:jobId/apply
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: JOB_SEEKER
+    * Function: Submits a job application.
+    
+    * OPTION A: JSON Format
+      - Request Headers:
+        Content-Type: application/json
+      - Request Body Payload:
+        {
+          "resumeUrl": "uploads/resumes/my-resume.pdf",
+          "coverLetter": "Hello, I am excited to apply..."
+        }
+        Note: "resumeUrl" must be a string referring to an existing file path or URL.
+
+    * OPTION B: Multipart Form-Data Format (File Upload)
+      - Request Headers:
+        Content-Type: multipart/form-data
+      - Request Body Fields:
+        - "resume": [Select File (PDF/DOC/DOCX)]
+        - "coverLetter": "Hello, I am excited to apply..." (Text, optional)
+
+
+7.2 VIEW MY APPLICATIONS
+    * Method: GET
+    * Route: /api/applications/my
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: JOB_SEEKER
+    * Request Body Payload: None
+    * Function: Lists all job applications submitted by the candidate.
+
+7.3 VIEW APPLICATIONS SUBMITTED TO MY JOB
+    * Method: GET
+    * Route: /api/jobs/:jobId/applications
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: Employer Owner or ADMIN
+    * Request Body Payload: None
+    * Function: Lists candidate applications submitted to a posted job.
+
+7.4 GET SINGLE APPLICATION DETAILS
+    * Method: GET
+    * Route: /api/applications/:id
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: Candidate Applicant, Job Employer, or ADMIN
+    * Request Body Payload: None
+    * Function: Fetches details of a single application.
+
+7.5 UPDATE APPLICATION STATUS
+    * Method: PATCH
+    * Route: /api/applications/:id/status
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: Job Employer or ADMIN
+    * Request Headers:
+      Content-Type: application/json
+    * Request Body Payload:
+      {
+        "status": "SHORTLISTED"
+      }
+      Note: Allowed status transitions: "APPLIED", "SHORTLISTED", "INTERVIEW",
+            "SELECTED", "REJECTED", "WITHDRAWN".
+    * Function: Moves application status forward and notifies the candidate.
+
+7.6 WITHDRAW / DELETE APPLICATION
+    * Method: DELETE
+    * Route: /api/applications/:id
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: Candidate Applicant or ADMIN
+    * Request Body Payload: None
+    * Function: Withdraws application.
+
+--------------------------------------------------------------------------------
+8. NOTIFICATIONS
+--------------------------------------------------------------------------------
+
+8.1 GET MY NOTIFICATIONS
+    * Method: GET
+    * Route: /api/notifications
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Request Body Payload: None
+    * Function: Retrieves all notifications sent to the user.
+
+8.2 MARK NOTIFICATION AS READ
+    * Method: PATCH
+    * Route: /api/notifications/:id/read
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Request Body Payload: None
+    * Function: Marks a single notification as read.
+
+8.3 MARK ALL NOTIFICATIONS AS READ
+    * Method: PATCH
+    * Route: /api/notifications/read-all
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Request Body Payload: None
+    * Function: Marks all unread user notifications as read in bulk.
+
+8.4 DELETE NOTIFICATION
+    * Method: DELETE
+    * Route: /api/notifications/:id
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Request Body Payload: None
+    * Function: Deletes a single notification.
+
+--------------------------------------------------------------------------------
+9. SYSTEM ADMINISTRATOR PANEL
+--------------------------------------------------------------------------------
+
+9.1 VIEW ALL REGISTERED USERS
+    * Method: GET
+    * Route: /api/admin/users
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: ADMIN
+    * Request Body Payload: None
+    * Function: Audits list of all users in the system.
+
+9.2 ACTIVATE / DEACTIVATE USER
+    * Method: PATCH
+    * Route: /api/admin/users/:id/status
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: ADMIN
+    * Request Headers:
+      Content-Type: application/json
+    * Request Body Payload:
+      {
+        "isActive": false
+      }
+    * Function: Suspends/blocks or restores user login session.
+
+9.3 DELETE USER
+    * Method: DELETE
+    * Route: /api/admin/users/:id
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: ADMIN
+    * Request Body Payload: None
+    * Function: Deletes a user account (self-deletion blocked).
+
+9.4 VIEW ALL JOBS (INCLUDES DRAFTS/CLOSED)
+    * Method: GET
+    * Route: /api/admin/jobs
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: ADMIN
+    * Request Body Payload: None
+    * Function: Audits list of all job postings in the system database.
+
+9.5 DELETE JOB
+    * Method: DELETE
+    * Route: /api/admin/jobs/:id
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: ADMIN
+    * Request Body Payload: None
+    * Function: Deletes any job listing.
+
+9.6 VIEW ALL JOB APPLICATIONS
+    * Method: GET
+    * Route: /api/admin/applications
+    * Auth Required: Yes (Authorization: Bearer <JWT>)
+    * Role Restriction: ADMIN
+    * Request Body Payload: None
+    * Function: Audits list of all job applications submitted.
+
+================================================================================
+
+--------------------------------------------------------------------------------
+10. API TESTING WORKFLOW GUIDE (POSTMAN INTEGRATION)
+--------------------------------------------------------------------------------
+
+To test the role-based features of Saksham efficiently without logging in and
+out constantly, or manually copying token strings after a database reset, follow
+this Postman configuration.
+
+10.1 ROLE-BASED VARIABLE SETUP
+    * Create a Postman environment (e.g., "Saksham Local") and define:
+      - base_url: http://localhost:8000/api
+      - seeker_token: (Leave blank initially)
+      - employer_token: (Leave blank initially)
+      - admin_token: (Leave blank initially)
+    * In each Postman folder, set the Authorization tab to "Bearer Token" and
+      reference the corresponding role variable:
+      - Job Seeker Requests: {{seeker_token}}
+      - Employer Requests: {{employer_token}}
+      - Admin Requests: {{admin_token}}
+
+10.2 AUTOMATED TOKEN REFRESHES (NO COPY-PASTE)
+    * When you run `npm run seed`, user IDs change and your tokens are invalidated.
+    * You can automatically capture and update variables by putting the following
+      scripts in the "Tests" tab of your Postman login requests:
+
+      [Job Seeker Login Request -> Tests Tab]:
+      --------------------------------------------------
+      const response = pm.response.json();
+      if (response.success && response.data.token) {
+          pm.environment.set("seeker_token", response.data.token);
+          console.log("Updated Seeker Token successfully!");
+      }
+      --------------------------------------------------
+
+      [Employer Login Request -> Tests Tab]:
+      --------------------------------------------------
+      const response = pm.response.json();
+      if (response.success && response.data.token) {
+          pm.environment.set("employer_token", response.data.token);
+          console.log("Updated Employer Token successfully!");
+      }
+      --------------------------------------------------
+
+      [Admin Login Request -> Tests Tab]:
+      --------------------------------------------------
+      const response = pm.response.json();
+      if (response.success && response.data.token) {
+          pm.environment.set("admin_token", response.data.token);
+          console.log("Updated Admin Token successfully!");
+      }
+      --------------------------------------------------
+
+    * Once configured, running the 3 login requests once will automatically update
+      the environment variables for all of your routes!
+
+10.3 API CATEGORIZATION BY USER ROLES
+
+    A. GUEST / PUBLIC APIS (No Token Required)
+       - POST   /api/auth/register          (Register accounts)
+       - POST   /api/auth/login             (Login to retrieve token)
+       - GET    /api/companies              (Browse registered companies)
+       - GET    /api/companies/:id          (Read company details)
+       - GET    /api/jobs                   (Search & filter job listings)
+       - GET    /api/jobs/:id               (Read job descriptions)
+
+    B. JOB SEEKER APIS (Role: JOB_SEEKER)
+       - POST   /api/profile                (Create/initialize candidate profile)
+       - GET    /api/profile                (View own candidate profile)
+       - PUT    /api/profile                (Edit profile fields/attachments)
+       - DELETE /api/profile                (Delete profile)
+       - POST   /api/jobs/:jobId/save       (Bookmark a job)
+       - DELETE /api/jobs/:jobId/save       (Unbookmark a job)
+       - GET    /api/saved-jobs             (View saved jobs list)
+       - POST   /api/jobs/:jobId/apply      (Apply to a job post with resume)
+       - GET    /api/applications/my        (View submitted applications)
+       - DELETE /api/applications/:id       (Withdraw an application)
+
+    C. EMPLOYER/RECRUITER APIS (Role: EMPLOYER)
+       - POST   /api/companies              (Register company profile)
+       - PUT    /api/companies/:id          (Edit company details/logo - Owner only)
+       - DELETE /api/companies/:id          (Delete company - Owner only)
+       - POST   /api/jobs                   (Publish a new job listing)
+       - PUT    /api/jobs/:id               (Edit job listing - Owner only)
+       - DELETE /api/jobs/:id               (Delete job listing - Owner only)
+       - GET    /api/jobs/:jobId/applications (View candidates applied to own job)
+       - PATCH  /api/applications/:id/status (Shortlist or reject candidates)
+
+    D. SYSTEM ADMINISTRATOR APIS (Role: ADMIN)
+       - GET    /api/admin/users            (View all user accounts)
+       - PATCH  /api/admin/users/:id/status  (Block or activate user logins)
+       - DELETE /api/admin/users/:id         (Force delete a user account)
+       - GET    /api/admin/jobs             (View all job postings)
+       - DELETE /api/admin/jobs/:id          (Force delete any job listing)
+       - GET    /api/admin/applications     (Audit all job applications)
+
+10.4 STEP-BY-STEP SEQUENCE FLOWS (USER JOURNEYS)
+
+    A. JOB SEEKER TESTING FLOW (Step-by-step setup)
+       -------------------------------------------------------------------------
+       1. REGISTER ACCOUNT:
+          * Request: POST {{base_url}}/auth/register
+          * Body Payload: Submit name, email, password, and set role to "JOB_SEEKER".
+       2. LOGIN:
+          * Request: POST {{base_url}}/auth/login
+          * Body Payload: Submit registered email & password.
+          * Action: Copy the long "token" string and save it as your seeker_token.
+       3. VERIFY EMPTY PROFILE (Expect 404):
+          * Request: GET {{base_url}}/profile
+          * Output: Returns 404 "Profile not found for this user" (as expected).
+       4. CREATE CANDIDATE PROFILE:
+          * Request: POST {{base_url}}/profile
+          * Body Payload: JSON containing phone, bio, location, skills array,
+            education, and experience details.
+       5. READ VERIFIED PROFILE (Expect 200):
+          * Request: GET {{base_url}}/profile
+          * Output: Returns 200 OK with the newly created profile data.
+       6. SEARCH FOR AVAILABLE JOBS:
+          * Request: GET {{base_url}}/jobs
+          * Action: Find an active job in the list and copy its 12-char "_id" field.
+       7. APPLY TO THE JOB:
+          * Request: POST {{base_url}}/jobs/:jobId/apply (replace :jobId with copied ID)
+          * Body Payload: JSON containing resumeUrl and coverLetter.
+       8. CHECK APPLICATION STATUS:
+          * Request: GET {{base_url}}/applications/my
+          * Output: Returns your application listing with status set to "APPLIED".
+
+    B. EMPLOYER / RECRUITER TESTING FLOW (Step-by-step setup)
+       -------------------------------------------------------------------------
+       1. REGISTER ACCOUNT:
+          * Request: POST {{base_url}}/auth/register
+          * Body Payload: Submit name, email, password, and set role to "EMPLOYER".
+       2. LOGIN:
+          * Request: POST {{base_url}}/auth/login
+          * Body Payload: Submit registered email & password.
+          * Action: Copy the long "token" string and save it as your employer_token.
+       3. REGISTER COMPANY PROFILE:
+          * Request: POST {{base_url}}/companies
+          * Body Payload: JSON containing companyName, description, website,
+            location, and industry.
+          * Action: Copy the company "_id" (12-char uppercase string) from the response.
+       4. POST A NEW JOB OPENING:
+          * Request: POST {{base_url}}/jobs
+          * Body Payload: JSON containing job details (title, description, location,
+            salary, skills array) and the companyId you copied in Step 3.
+          * Action: Copy the job "_id" (12-char uppercase string) from the response.
+       5. VIEW JOB APPLICATIONS:
+          * Request: GET {{base_url}}/jobs/:jobId/applications (use job ID from Step 4)
+          * Output: Returns list of candidates who applied. Copy the application "_id".
+       6. UPDATE CANDIDATE APPLICATION STATUS:
+          * Request: PATCH {{base_url}}/applications/:id/status (use application ID)
+          * Body Payload: { "status": "SHORTLISTED" }
+          * Output: Returns 200 OK. Candidate is notified of status change!
+
+    C. SYSTEM ADMINISTRATOR TESTING FLOW (Step-by-step setup)
+       -------------------------------------------------------------------------
+       1. LOGIN AS ADMIN:
+          * Request: POST {{base_url}}/auth/login
+          * Body Payload: Submit default admin email ("admin@jobportal.com") & password ("password123").
+          * Action: Copy the long "token" string and save it as your admin_token.
+       2. VIEW ALL REGISTERED USERS:
+          * Request: GET {{base_url}}/admin/users
+          * Output: Returns a list of all Job Seekers and Employers in the database.
+          * Action: Copy a target user's 12-char ID for the next step.
+       3. SUSPEND / DEACTIVATE USER LOGIN:
+          * Request: PATCH {{base_url}}/admin/users/:id/status (use the user ID)
+          * Body Payload: { "isActive": false }
+          * Output: 200 OK.
+          * Action: Try logging in as that deactivated user. You should receive a "403 Forbidden" error.
+       4. RESTORE / REACTIVATE USER LOGIN:
+          * Request: PATCH {{base_url}}/admin/users/:id/status (use the user ID)
+          * Body Payload: { "isActive": true }
+          * Output: 200 OK. User can now log in again successfully.
+       5. VIEW ALL JOBS IN SYSTEM:
+          * Request: GET {{base_url}}/admin/jobs
+          * Output: Returns list of all job posts (including open, closed, or draft posts).
+          * Action: Copy a target job's 12-char ID.
+       6. DELETE JOB POSTING:
+          * Request: DELETE {{base_url}}/admin/jobs/:id (use the job ID)
+          * Output: 200 OK. The job listing is permanently removed.
+       7. AUDIT ALL SYSTEM APPLICATIONS:
+          * Request: GET {{base_url}}/admin/applications
+          * Output: Returns a comprehensive list of all applications submitted in the system.
+
+================================================================================
+

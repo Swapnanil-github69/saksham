@@ -45,7 +45,7 @@ const validateJob = (req, res, next) => {
   }
 
   // Common data checks if provided
-  if (companyId && !mongoose.Types.ObjectId.isValid(companyId)) {
+  if (companyId && !/^[A-Z0-9]{12}$/.test(companyId)) {
     return next(new AppError('Invalid companyId format', 'VALIDATION_ERROR', 400));
   }
 
@@ -115,7 +115,7 @@ const validateJob = (req, res, next) => {
 
 const validateJobId = (req, res, next) => {
   const jobId = req.params.jobId || req.params.id;
-  if (!jobId || !mongoose.Types.ObjectId.isValid(jobId)) {
+  if (!jobId || !/^[A-Z0-9]{12}$/.test(jobId)) {
     return next(new AppError('Invalid job ID format', 'VALIDATION_ERROR', 400));
   }
   next();

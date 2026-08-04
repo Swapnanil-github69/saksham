@@ -1,15 +1,20 @@
 const mongoose = require('mongoose');
 const { APPLICATION_STATUS } = require('../constants/application.constants');
+const generateAlphanumericId = require('../utils/idGenerator');
 
 const ApplicationSchema = new mongoose.Schema(
   {
+    _id: {
+      type: String,
+      default: () => generateAlphanumericId(),
+    },
     jobId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: 'Job',
       required: true,
     },
     applicantId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: 'User',
       required: true,
     },

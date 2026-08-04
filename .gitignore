@@ -2,3 +2,5 @@
 node_modules/
 uploads/
 *.log
+.API_ENDPOINTS.txt
+.API_REFERENCE.txt
