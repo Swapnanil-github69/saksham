@@ -507,3 +507,14 @@ http://localhost:8000/api
 * **URL**: `/admin/applications`
 * **Auth Required**: Yes
 * **Role**: `ADMIN`
+
+---
+
+## Repository Folder Structure
+
+The project code is organized into domain-specific subfolders within each layer:
+
+*   **Controllers (`src/controllers/`)**: Grouped by domain (e.g. `auth/`, `job/`, `application/`).
+*   **Routes (`src/routes/`)**: Grouped by domain (e.g. `auth/`, `job/`, `application/`).
+*   **Services (`src/services/`)**: Grouped by domain (e.g. `auth/`, `job/`, `application/`).
+*   **Validators (`src/validators/`)**: Grouped by domain (e.g. `auth/`, `job/`, `application/`).
