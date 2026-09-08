@@ -1,0 +1,1017 @@
+/* ==========================================================================
+   Saksham Job Seeker Dashboard Styles
+   Pixel-perfect replication of modern SaaS Job Portal mockup
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Ambient Canvas & Master Bezel Frame
+   -------------------------------------------------------------------------- */
+.js-ambient-canvas {
+  min-height: 100vh;
+  background: radial-gradient(circle at 15% 25%, #d946ef 0%, #8b5cf6 30%, #3b82f6 70%, #1e1b4b 100%);
+  padding: 32px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.js-master-frame {
+  width: 100%;
+  max-width: 1360px;
+  background-color: #ffffff;
+  border-radius: 28px;
+  box-shadow: 0 25px 70px -15px rgba(0, 0, 0, 0.4), 0 0 1px rgba(255, 255, 255, 0.3);
+  display: flex;
+  overflow: hidden;
+  min-height: 780px;
+}
+
+/* --------------------------------------------------------------------------
+   2. Left Sidebar Navigation
+   -------------------------------------------------------------------------- */
+.js-sidebar {
+  width: 210px;
+  flex-shrink: 0;
+  border-right: 1px solid #f1f5f9;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #ffffff;
+}
+
+.js-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px 24px 8px;
+}
+
+.js-brand-icon .flower-icon {
+  font-size: 18px;
+}
+
+.js-brand-text {
+  font-size: 18px;
+  font-weight: 800;
+  color: #09090b;
+  letter-spacing: -0.03em;
+}
+
+.js-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.js-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #52525b;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.js-nav-item:hover {
+  background-color: #f8fafc;
+  color: #09090b;
+}
+
+.js-nav-item.active {
+  background-color: #ffffff;
+  color: #09090b;
+  font-weight: 600;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.js-nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+/* Sidebar Bottom Workshop Card */
+.js-sidebar-workshop-card {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.workshop-header h5 {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #09090b;
+  line-height: 1.3;
+}
+
+.workshop-art-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.art-box {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.box-purple { background-color: #f3e8ff; }
+.box-mint { background-color: #ecfdf5; }
+.box-globe { background-color: #e0f2fe; }
+
+.btn-workshop {
+  background-color: #e11d48;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  transition: background-color 0.15s ease;
+}
+
+.btn-workshop:hover {
+  background-color: #be123c;
+}
+
+/* --------------------------------------------------------------------------
+   3. Main Area & Top Header
+   -------------------------------------------------------------------------- */
+.js-main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  min-width: 0;
+}
+
+.js-top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 28px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.js-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.js-header-date {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #09090b;
+}
+
+.js-status-dropdown-wrapper {
+  position: relative;
+}
+
+.js-status-pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 9999px;
+  padding: 4px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #0f766e;
+  letter-spacing: 0.02em;
+}
+
+.status-dot-indicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.js-status-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 6px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 6px;
+  z-index: 50;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.js-status-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #334155;
+  text-align: left;
+}
+
+.js-status-dropdown-item:hover {
+  background-color: #f8fafc;
+}
+
+.js-status-dropdown-item.selected {
+  background-color: #f1f5f9;
+  color: #09090b;
+}
+
+/* Header Right Actions */
+.js-header-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.btn-back-landing {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #4f46e5;
+  background-color: #ede9fe;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #c7d2fe;
+  transition: all 0.15s ease;
+}
+
+.btn-back-landing:hover {
+  background-color: #e0e7ff;
+}
+
+.js-notifications-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #334155;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.js-notifications-btn:hover {
+  background-color: #f8fafc;
+}
+
+.notification-bell-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.bell-glow-star {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  font-size: 10px;
+}
+
+.js-user-avatar-frame {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1.5px solid #e2e8f0;
+}
+
+.js-user-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --------------------------------------------------------------------------
+   4. Search Header Bar
+   -------------------------------------------------------------------------- */
+.js-search-header-container {
+  padding: 18px 28px 12px 28px;
+  border-bottom: 1px solid #f8fafc;
+}
+
+.search-title-and-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.js-page-title {
+  font-size: 21px;
+  font-weight: 800;
+  color: #09090b;
+  letter-spacing: -0.03em;
+}
+
+.js-quick-search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 6px 14px;
+  width: 280px;
+}
+
+.js-quick-search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 13px;
+  font-family: inherit;
+  color: #09090b;
+  width: 100%;
+}
+
+.btn-clear-search {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* --------------------------------------------------------------------------
+   5. Two-Column Body Grid (Filters on Left, Jobs on Right)
+   -------------------------------------------------------------------------- */
+.js-body-grid {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Filter Column */
+.js-filter-column {
+  width: 225px;
+  flex-shrink: 0;
+  border-right: 1px solid #f1f5f9;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: #ffffff;
+}
+
+.js-filter-tabs {
+  display: flex;
+  background-color: #f1f5f9;
+  padding: 3px;
+  border-radius: 10px;
+}
+
+.filter-tab-btn {
+  flex: 1;
+  padding: 6px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.filter-tab-btn.active {
+  background-color: #ffffff;
+  color: #09090b;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.filter-group-card {
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 14px;
+}
+
+.filter-group-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.group-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.group-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #09090b;
+}
+
+.pink-asterisk {
+  color: #ec4899;
+  font-weight: bold;
+}
+
+.chevron-icon {
+  color: #94a3b8;
+  transition: transform 0.2s ease;
+}
+
+.chevron-icon.rotated {
+  transform: rotate(90deg);
+}
+
+.chevron-icon.rotated-down {
+  transform: rotate(180deg);
+}
+
+.filter-group-content {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #334155;
+  cursor: pointer;
+  padding: 3px 0;
+  position: relative;
+}
+
+.checkbox-row:hover .checkbox-label-text {
+  color: #09090b;
+}
+
+.custom-checkbox {
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.checkbox-mark {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1.5px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  color: transparent;
+  transition: all 0.15s ease;
+}
+
+.custom-checkbox:checked + .checkbox-mark {
+  background-color: #09090b;
+  border-color: #09090b;
+  color: #ffffff;
+}
+
+/* Tools search & items */
+.filter-search-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 5px 10px;
+  margin-bottom: 6px;
+}
+
+.filter-search-input-wrap input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 11.5px;
+  font-family: inherit;
+  color: #09090b;
+  width: 100%;
+}
+
+.tools-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tool-info-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-icon-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.selected-skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.skill-pill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #334155;
+}
+
+.btn-remove-skill {
+  font-size: 9px;
+  color: #64748b;
+}
+
+/* --------------------------------------------------------------------------
+   6. Right Job Content Column & Category Tabs
+   -------------------------------------------------------------------------- */
+.js-content-column {
+  flex: 1;
+  padding: 20px 28px;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+.js-categories-section {
+  margin-bottom: 20px;
+}
+
+.js-category-cards-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.js-category-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.js-category-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.category-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cat-icon {
+  color: #64748b;
+  display: flex;
+  align-items: center;
+}
+
+.cat-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #09090b;
+}
+
+.cat-count-sub {
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.04em;
+}
+
+/* Highlighted Ideal Matches Category */
+.js-category-card.selected {
+  background-color: #ede9fe;
+  border-color: #a855f7;
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.12);
+}
+
+.js-category-card.selected .cat-icon {
+  color: #6b21a8;
+}
+
+.js-category-card.selected .cat-title {
+  color: #581c87;
+}
+
+.js-category-card.selected .cat-count-sub {
+  color: #6b21a8;
+}
+
+/* Category Title & View Toggles */
+.js-list-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.js-active-category-heading {
+  font-size: 18px;
+  font-weight: 800;
+  color: #09090b;
+  letter-spacing: -0.02em;
+}
+
+.js-view-mode-toggles {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.view-toggle-btn {
+  color: #94a3b8;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.view-toggle-btn.active {
+  color: #09090b;
+}
+
+/* --------------------------------------------------------------------------
+   7. Company Grouped Job Listings
+   -------------------------------------------------------------------------- */
+.js-job-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.js-company-group-card {
+  background-color: #ffffff;
+  border: 1px solid #f1f5f9;
+  border-radius: 18px;
+  box-shadow: 0 4px 16px -4px rgba(15, 23, 42, 0.04);
+  padding: 20px;
+}
+
+.company-group-header {
+  margin-bottom: 12px;
+}
+
+.company-info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.company-logo-frame {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.company-default-logo {
+  width: 100%;
+  height: 100%;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.company-title-wrap {
+  flex: 1;
+}
+
+.name-and-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.company-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #09090b;
+}
+
+.badge-actively-hiring {
+  background-color: #dcfce7;
+  color: #15803d;
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  letter-spacing: 0.03em;
+}
+
+.company-tagline {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 3px;
+}
+
+.company-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.company-type-size {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.02em;
+}
+
+.btn-more-options {
+  color: #94a3b8;
+  font-size: 14px;
+  padding: 2px 4px;
+}
+
+/* Job Rows Inside Company */
+.company-jobs-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.js-job-card-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-top: 1px solid #f8fafc;
+}
+
+.job-details-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.job-role-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #09090b;
+}
+
+.job-tags-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.job-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.remote-badge {
+  color: #2563eb;
+}
+
+.salary-badge {
+  color: #09090b;
+  font-weight: 600;
+}
+
+.salary-pill-icon {
+  background-color: #f1f5f9;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: #475569;
+}
+
+/* Actions Right */
+.job-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.job-posted-time {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.02em;
+}
+
+.btn-bookmark-job {
+  color: #64748b;
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.btn-bookmark-job:hover {
+  background-color: #f1f5f9;
+  color: #09090b;
+}
+
+.btn-bookmark-job.saved {
+  color: #09090b;
+}
+
+.btn-apply-job {
+  background-color: #ffffff;
+  color: #09090b;
+  border: 1.5px solid #09090b;
+  border-radius: 9999px;
+  padding: 6px 18px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: all 0.15s ease;
+}
+
+.btn-apply-job:hover {
+  background-color: #09090b;
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   8. Application Modal
+   -------------------------------------------------------------------------- */
+.apply-modal-card {
+  max-width: 480px;
+}
+
+.apply-modal-header {
+  margin-bottom: 20px;
+}
+
+.apply-role-badge {
+  font-size: 10px;
+  font-weight: 800;
+  color: #2563eb;
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  padding: 2px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.apply-modal-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #09090b;
+}
+
+.apply-modal-company {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.apply-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.resume-attached-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.resume-attached-box .file-icon {
+  font-size: 16px;
+  margin-right: 8px;
+}
+
+.resume-attached-box .file-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #09090b;
+  flex: 1;
+}
+
+.btn-change-file {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.apply-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  font-size: 13.5px;
+  font-family: inherit;
+  outline: none;
+  resize: vertical;
+}
+
+.apply-textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.apply-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.btn-cancel {
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  padding: 8px 16px;
+}
+
+.btn-cancel:hover {
+  color: #09090b;
+}
+
+/* --------------------------------------------------------------------------
+   9. Responsive Breakpoints
+   -------------------------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .js-ambient-canvas {
+    padding: 16px;
+  }
+  .js-category-cards-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 860px) {
+  .js-sidebar {
+    display: none;
+  }
+  .js-filter-column {
+    display: none;
+  }
+}
